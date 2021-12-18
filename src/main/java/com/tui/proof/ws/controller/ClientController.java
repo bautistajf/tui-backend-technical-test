@@ -35,7 +35,7 @@ public class ClientController {
         final ClientDTO response = clientMapper.toDTO(clientService.create(clientMapper.toEntity(clientRequest)));
 
         final HttpHeaders httpHeaders = ControllerHelper.buildHeaders(startTime);
-        return new ResponseEntity<>(response, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(response, httpHeaders, HttpStatus.CREATED);
     }
 
     @PutMapping("/{clientId}")

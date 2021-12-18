@@ -2,10 +2,10 @@ package com.tui.proof.ws.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tui.proof.dto.OrderRequestDTO;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -24,11 +24,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
 @AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource(locations = "classpath:application.yml")
-@RequiredArgsConstructor
 class OrderControllerTest {
 
-    private final ObjectMapper objectMapper;
-    private final MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void create_order_thenOk() throws Exception {

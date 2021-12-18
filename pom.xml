@@ -22,7 +22,14 @@
         <springdoc-openapi-ui.version>1.4.4</springdoc-openapi-ui.version>
         <jacoco.version>0.8.5</jacoco.version>
         <sonar.exclusions>
-            **/configuration/Oauth2ConfigurationMethodParser.java,**/dto/*,**/util/*,**/exception/*,**/entity/*,**/model/*
+            **/JwtOperations.java,
+            **/security/JwtRequestFilter.java,
+            **/configuration/Oauth2ConfigurationMethodParser.java,
+            **/dto/*,
+            **/util/*,
+            **/exception/*,
+            **/entity/*,
+            **/model/*
         </sonar.exclusions>
     </properties>
 

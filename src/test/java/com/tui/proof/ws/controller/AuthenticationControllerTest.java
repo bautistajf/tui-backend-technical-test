@@ -2,8 +2,8 @@ package com.tui.proof.ws.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tui.proof.dto.AuthenticationRequest;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -17,12 +17,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@RequiredArgsConstructor
 class AuthenticationControllerTest {
 
-    private final ObjectMapper objectMapper;
-    private final MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void successfulLogin_thenOk() throws Exception {

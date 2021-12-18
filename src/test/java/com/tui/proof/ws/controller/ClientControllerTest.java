@@ -1,14 +1,14 @@
 package com.tui.proof.ws.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import com.tui.proof.dto.ClientRequestDTO;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -20,13 +20,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
-@AutoConfigureMockMvc(addFilters = false)
-@TestPropertySource(locations = "classpath:application.yml")
-@RequiredArgsConstructor
+@AutoConfigureMockMvc
 class ClientControllerTest {
 
-    private final ObjectMapper objectMapper;
-    private final MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void create_client_thenOk() throws Exception {
@@ -34,6 +35,25 @@ class ClientControllerTest {
                         .content(objectMapper.writeValueAsString(getClientDTOMock()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(jsonPath("$.clientId", notNullValue()));
+    }
+
+    @Test
+    void create_client_return_bad_request() throws Exception {
+        final ClientRequestDTO dto = getClientDTOMock();
+        dto.setFirstName(null);
+        mockMvc.perform(MockMvcRequestBuilders.post(CLIENT_CONTROLLER_PATH)
+                        .content(objectMapper.writeValueAsString(dto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void update_client_thenOk() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put(CLIENT_CONTROLLER_PATH + "/1")
+                        .content(objectMapper.writeValueAsString(getClientDTOMock()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.clientId", notNullValue()));
     }
 

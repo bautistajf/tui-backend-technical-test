@@ -19,7 +19,6 @@ import java.util.Optional;
 import static com.tui.proof.util.ErrorMessageCode.ERROR_ORDER_COOKED_001;
 import static com.tui.proof.util.ErrorMessageCode.ERROR_ORDER_DOES_NOT_EXIST_001;
 import static java.lang.String.format;
-import static java.util.Objects.nonNull;
 
 @Service
 @RequiredArgsConstructor
@@ -45,17 +44,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order updateOrder(final Order order) throws NotFoundException, CookedException {
         final Client client = clientService.findById(order.getClient().getClientId());
-        order.setClient(client);
-        if (nonNull(findById(order.getOrderId()))) {
+        final Order orderDB = findById(order.getOrderId());
+        if (orderDB.isCooked())
+            throw new CookedException(format(ERROR_ORDER_COOKED_001.getName(), order.getOrderId()));
 
-            if (order.isCooked())
-                throw new CookedException(format(ERROR_ORDER_COOKED_001.getName(), order.getOrderId()));
-
-            order.setOrderTotal(PRICE_BY_PILOTE * order.getPilotes().getNumVal());
-            order.setOrderUpdateDate(LocalDate.now());
-
-            orderRepository.save(order);
-        }
+        orderDB.setClient(client);
+        orderDB.setDeliveryAddress(order.getDeliveryAddress());
+        orderDB.setOrderTotal(PRICE_BY_PILOTE * order.getPilotes().getNumVal());
+        orderDB.setOrderUpdateDate(LocalDate.now());
+        orderRepository.save(orderDB);
         return order;
     }
 

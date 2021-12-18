@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: tui-api
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+  datasource:
+    data: classpath:/data-trans.sql
+    url: jdbc:h2:mem:tuiOrderTest
+    driver-class-name: org.h2.Driver
+    password:
+    username: sa
+    initialization-mode: always
+  security:
+    basic:
+      enabled: false
+
+management:
+  security:
+    enabled: false
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: ${server.servlet.context-path}/management
+      exposure:
+        include: '*'
+
+server:
+  port: 8080
+  servlet:
+    context-path: /tui-api
+
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: ${server.servlet.context-path}/v2/api-docs
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE
+    org.hibernate.SQL: DEBUG
+
+
+jwt:
+  secret: jwt_token_secret
+  token-validity-in-seconds: 720
+
+order:
+  cook-time-in-seconds: 1
+  wait-to-time-in-seconds: 3
+
+
